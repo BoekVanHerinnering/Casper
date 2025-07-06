@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Verse Card Preview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      padding: 20px;
+      text-align: center;
+    }
+    #verseCard {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin: auto;
+    }
+    #verseText {
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+    #verseRef {
+      font-weight: bold;
+      color: #555;
+    }
+    .btn {
+      margin: 10px;
+      padding: 10px 15px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div id="verseCard">
+    <div id="verseText">Loading...</div>
+    <div id="verseRef"></div>
+    <button class="btn" onclick="shareVerse()">📤 Share</button>
+    <button class="btn" onclick="downloadImage()">📥 Download</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    let data = params.get("data");
+    if (data) {
+      try {
+        data = JSON.parse(decodeURIComponent(data));
+        document.getElementById("verseText").textContent = data.text;
+        document.getElementById("verseRef").textContent = data.reference;
+      } catch (e) {
+        document.getElementById("verseText").textContent = "⚠️ Error loading verse.";
+      }
+    } else {
+      document.getElementById("verseText").textContent = "⚠️ No verse selected.";
+    }
+
+    function shareVerse() {
+      const shareText = document.getElementById("verseText").textContent + "\n\n" + document.getElementById("verseRef").textContent + "\n\n📥 Download the app: https://boekvanherinnering.github.io";
+      if (navigator.share) {
+        navigator.share({
+          title: "Bible Verse",
+          text: shareText
+        });
+      } else {
+        alert("Sharing not supported on this device.");
+      }
+    }
+
+    function downloadImage() {
+      alert("Download feature coming soon!");
+    }
+  </script>
+</body>
+</html>
